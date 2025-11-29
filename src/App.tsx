@@ -1,5 +1,12 @@
-import { useEffect, useState } from 'react';
 import { Header } from './comps/Header';
+import {
+  Briefcase,
+  Code,
+  GraduationCap,
+  Globe,
+  Layers,
+  User,
+} from 'lucide-react';
 
 import {
   aboutData,
@@ -10,78 +17,53 @@ import {
   skillsData,
 } from './data/data';
 import { Section } from './comps/Section';
-
-const SCROLL_TRIGGER = 50;
+import { ExpEduCard } from './comps/ExpEduCard';
+import { Paragraph } from './comps/Paragraph';
 
 export const App = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > SCROLL_TRIGGER);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800 antialiased p-8">
+    <div className="min-h-screen bg-gray-50 text-gray-800 antialiased">
+      <Header />
       <div className="max-w-6xl flex flex-col justify-center align-center gap-4 mx-auto">
-        <Header isScrolled={isScrolled} />
-
-        <Section title={aboutData.title}>
-          <p>{aboutData.firstParagraph}</p>
-          <p>{aboutData.secondParagraph}</p>
-          <p>{aboutData.thirdParagraph}</p>
+        <Section title={aboutData.title} icon={<User />}>
+          <Paragraph>{aboutData.firstParagraph}</Paragraph>
+          <Paragraph>{aboutData.secondParagraph}</Paragraph>
         </Section>
 
-        <Section title={experienceData.title}>
-          {experienceData.experiences.map(
-            (
-              {
-                title,
-                company,
-                location,
-                role,
-                startDate,
-                endDate,
-                description,
-                logo,
-              },
-              index
-            ) => (
-              <div key={index}>
-                <img src={logo} alt={company} />
-                <p>{title}</p>
-                <p>{company}</p>
-                <p>{location}</p>
-                <p>{role}</p>
-                <p>
-                  {startDate.toString()} - {endDate?.toString()}
-                </p>
-                <p>{description}</p>
-              </div>
-            )
-          )}
+        <Section title={experienceData.title} icon={<Briefcase />}>
+          <div>
+            {experienceData.experiences.map((experience, index) => (
+              <ExpEduCard
+                key={index}
+                logo={experience.logo}
+                title={experience.role}
+                subtitle={experience.company}
+                description={experience.description}
+                skills={experience.skills}
+                startDate={experience.startDate}
+                endDate={experience.endDate}
+              />
+            ))}
+          </div>
         </Section>
 
-        <Section title="Education">
-          {educationData.degrees.map((edu, index) => (
-            <div key={index}>
-              <p className="font-semibold">{edu.institution}</p>
-              <p>{edu.degree}</p>
-              <p className="text-sm text-gray-600">
-                {edu.startDate.toString()} - {edu.endDate.toString()}
-              </p>
-            </div>
-          ))}
+        <Section title={educationData.title} icon={<GraduationCap />}>
+          <div>
+            {educationData.degrees.map((edu, index) => (
+              <ExpEduCard
+                key={index}
+                logo={edu.logo}
+                title={edu.degree}
+                description={edu.description}
+                subtitle={edu.institution}
+                startDate={edu.startDate}
+                endDate={edu.endDate}
+              />
+            ))}
+          </div>
         </Section>
 
-        <Section title="Projects">
+        <Section title={projectsData.title} icon={<Layers />}>
           {projectsData.projects.map((project, index) => (
             <div key={index}>
               <p className="font-semibold">{project.name}</p>
@@ -91,7 +73,7 @@ export const App = () => {
           ))}
         </Section>
 
-        <Section title="Skills">
+        <Section title={skillsData.title} icon={<Code />}>
           {skillsData.skills.map((skill, index) => (
             <div key={index}>
               <p className="font-semibold">{skill}</p>
@@ -99,7 +81,7 @@ export const App = () => {
           ))}
         </Section>
 
-        <Section title="Languages">
+        <Section title={languagesData.title} icon={<Globe />}>
           {languagesData.languages.map((lang, index) => (
             <div key={index}>
               <p className="font-semibold">{lang.language}</p>
